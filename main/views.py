@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from .models import playlist_user
 from django.urls.base import reverse
 from django.contrib.auth import authenticate,login,logout
@@ -13,6 +14,7 @@ import json
 f = open('card.json', 'r')
 CONTAINER = json.load(f)
 
+@login_required
 def default(request):
     global CONTAINER
 
@@ -26,7 +28,7 @@ def default(request):
     return render(request, 'player.html',{'CONTAINER':CONTAINER, 'song':song})
 
 
-
+@login_required
 def playlist(request):
     cur_user = playlist_user.objects.get(username = request.user)
     try:
@@ -44,6 +46,7 @@ def playlist(request):
     return render(request, 'playlist.html', {'song':song,'user_playlist':user_playlist})
 
 
+@login_required
 def search(request):
   if request.method == 'POST':
 
@@ -61,7 +64,7 @@ def search(request):
 
 
 
-
+@login_required
 def add_playlist(request):
     cur_user = playlist_user.objects.get(username = request.user)
 
